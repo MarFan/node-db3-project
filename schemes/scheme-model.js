@@ -18,7 +18,11 @@ function findById(id) {
 }
 
 function findSteps(id) {
-    return db("steps").where('scheme_id',  id ).orderBy('step_number');
+    return db("steps")
+            .where('scheme_id',  id )
+            .join('schemes', 'steps.scheme_id', 'schemes.id')
+            .select('steps.id', 'scheme_name', 'instructions', 'step_number')
+            .orderBy('step_number');
 }
 
 function add(data) {
@@ -35,7 +39,5 @@ function update(changes, id) {
 }
 
 function remove(id) {
-    return db('schemes')
-            .where({ id })
-            .del()
+    return db('schemes').where({ id }).del();
 }
